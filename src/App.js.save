@@ -1,0 +1,38 @@
+
+cd
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="status">{status}</div>
+      <div className="calc-row">
+        {this.renderSquare(0)}
+        {this.renderSquare(C)}
+        {this.renderSquare(/)}
+      </div>
+      <div className="calc-row">
+        {this.renderSquare(1)}
+        {this.renderSquare(2)}
+        {this.renderSquare(3)}
+        {this.renderSquare(+)}
+      </div>
+      <div className="calc-row">
+        {this.renderSquare(4)}
+        {this.renderSquare(5)}
+        {this.renderSquare(6)}
+        {this.renderSquare(-)}
+      </div>
+      <div className="calc-row">
+        {this.renderSquare(7)}
+        {this.renderSquare(8)}
+        {this.renderSquare(9)}
+        {this.renderSquare(*)}
+      </div>
+    );
+  }
+}
+
+export default App;

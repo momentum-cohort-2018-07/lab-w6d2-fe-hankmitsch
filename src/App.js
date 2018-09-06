@@ -1,21 +1,134 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
+import './App.css'
+
+// what state is there?
+// when does the state change?
 
 class App extends Component {
-  render() {
+  state = {
+    value: 0,
+    displayValue: '0',
+    waitingForOperand: false,
+    operator: null
+  }
+
+  clearDisplay () {
+    this.setState({
+      displayValue: '0'
+    })
+  }
+
+  inputPercent () {
+    const { displayValue } = this.state
+    const value = parseFloat(displayValue)
+
+    this.setState({
+      displayValue: String(value / 100)
+    })
+  }
+
+  inputDigit (digit) {
+    const { displayValue, waitingForOperand } = this.state
+
+    if (waitingForOperand) {
+      this.setState({
+        displayValue: String(digit),
+        waitingForOperand: false
+      })
+    } else {
+      this.setState({
+        displayValue: displayValue === '0' ? String(digit) : displayValue + digit
+      })
+    }
+  }
+
+  inputDot () {
+    const { displayValue, waitingForOperand } = this.state
+    
+    if (waitingForOperand) {
+      this.setState({
+        displayValue: '.',
+        waitingForOperand: false
+      })
+    } else if (displayValue.indexOf('.') === -1) {
+      this.setState({
+        displayValue: displayValue + '.',
+        waitingForOperand: false
+      })
+    }  
+  }
+
+  performOperation (nextOperator) {
+    const { displayValue, operator, value } = this.state
+    const nextValue = parseFloat(displayValue)
+
+    const operations = {
+      '/': (prevValue, nextValue) => prevValue / nextValue,
+      '*': (prevValue, nextValue) => prevValue * nextValue,
+      '+': (prevValue, nextValue) => prevValue + nextValue,
+      '-': (prevValue, nextValue) => prevValue - nextValue,
+      '=': (prevValue, nextValue) => nextValue,
+    }
+
+    if (value == null) {
+      this.setState({
+        value: inputValue
+      })
+    } else if (operator) {
+      const currentValue = value || 0
+      const computedValue = operations[operator](currentValue, nextValue)
+    }
+
+    this.setState({
+      value: computedValue,
+      displayValue: String(computedValue)
+    })
+
+    if (displayValue)
+
+    this.setState({
+      waitingForOperand: true,
+      operator: nextOperator
+    })
+  }
+
+  render () {
+    const { displayValue } = this.state
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div className='calculator'>
+        <div className='calculator-display'>{displayValue}</div>
+        <div className='calculator-keypad'>
+          <div className='input-keys'>
+            <div className='function-keys'>
+              <button className='calculator-key key-clear' onClick={() => this.clearDisplay()}>A/C</button>
+              <button className='calculator-key key-percent' onClick={() => this.inputPercent()}>%</button>
+            </div>
+            <div className='digit-keys'>
+              <button className='calculator-key key-0' onClick={() => this.inputDigit(0)}>0</button>
+              <button className='calculator-key key-dot' onClick={() => this.inputDot()}>.</button>
+              <button className='calculator-key key-1' onClick={() => this.inputDigit(1)}>1</button>
+              <button className='calculator-key key-2' onClick={() => this.inputDigit(2)}>2</button>
+              <button className='calculator-key key-3' onClick={() => this.inputDigit(3)}>3</button>
+              <button className='calculator-key key-4' onClick={() => this.inputDigit(4)}>4</button>
+              <button className='calculator-key key-5' onClick={() => this.inputDigit(5)}>5</button>
+              <button className='calculator-key key-6' onClick={() => this.inputDigit(6)}>6</button>
+              <button className='calculator-key key-7' onClick={() => this.inputDigit(7)}>7</button>
+              <button className='calculator-key key-8' onClick={() => this.inputDigit(8)}>8</button>
+              <button className='calculator-key key-9' onClick={() => this.inputDigit(9)}>9</button>
+            </div>
+          </div>
+          <div className='operator-keys'>
+            <button className='calculator-key key-divide' onClick={() => this.performOperation('/')}>/</button>
+            <button className='calculator-key key-multiply' onClick={() => this.performOperation('*')}>*</button>
+            <button className='calculator-key key-subtract' onClick={() => this.performOperation('-')}>-</button>
+            <button className='calculator-key key-add' onClick={() => this.performOperation('+')}>+</button>
+            <button className='calculator-key key-equals' onClick={() => this.performOperation('=')}>=</button>
+          </div>
+        </div>
       </div>
-    );
+    )
   }
 }
-
-export default App;
+export default App
