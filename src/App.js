@@ -5,9 +5,9 @@ import './App.css'
 // what state is there?
 // when does the state change?
 
-class App extends Component {
+class App extends React.Component {
   state = {
-    value: 0,
+    value: null,
     displayValue: '0',
     waitingForOperand: false,
     operator: null
@@ -73,17 +73,17 @@ class App extends Component {
 
     if (value == null) {
       this.setState({
-        value: inputValue
+        value: nextValue
       })
     } else if (operator) {
       const currentValue = value || 0
       const computedValue = operations[operator](currentValue, nextValue)
-    }
 
     this.setState({
       value: computedValue,
       displayValue: String(computedValue)
     })
+  }
 
     if (displayValue)
 
